@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome to miniproject</title>
+</head>
+<body>
+<% if(warning.length>0) { %>
+	<h3 style="color: red"><%= warning[0] %></h3>
+<% } %>
+<form action="/video/search" method="post">
+	<input type="text" name="key" placeholder="Enter the video name"><br><br>
+	<input type="submit">
+</form>
+</form>
+</body>
+</html>
