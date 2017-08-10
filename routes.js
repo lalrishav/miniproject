@@ -12,14 +12,17 @@ var validSearchKey = function(req,res,next){
 		  the less data to be checked but in real time
 		  there may be millions of data to check so we must
 		  use trie data structure to check it*/
+		  var flagToCheckValidation = 0
 		for(var i=0;i<list.length;i++){
 			if(keyWord.indexOf(list[i])!=-1){
+				flagToCheckValidation = 1;
 				let errorMessage = "Sorry can not complete your request as the content you want to search comes under restricted area!!!"
 				req.flash('warning',errorMessage)
 				res.redirect("/");
 			}
 		}
-		return next();
+		if(flagToCheckValidation == 0)
+			return next();
 	})
 } 
 
@@ -34,7 +37,17 @@ module.exports = function(app){
 	app.post("/video/search",validSearchKey,function(req,res){
 		let keyWord = req.body.key;
 		video.getVideoByName(keyWord,(found)=>{
-			//console.log(found)
+			if(found.res == false || found.data.length < 0){
+				let errorMessage = "Sorry no data found"
+				req.flash('warning',errorMessage)
+				res.redirect("/");
+			}
+			else{
+				let pageInfo = {}
+				pageInfo.result = found.data;
+				console.log(found.data[0])
+				res.render("searchResult",pageInfo); 
+			}
 		})
 
 	})
