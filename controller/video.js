@@ -10,7 +10,7 @@ youTube.setKey("AIzaSyDgexepnWUBo9Tw-aUvpP95aiJjeeorlyM");
 exports.getVideoByName = function(key,callback){
 	/*A function to get youtube video by name*/
 	const channel = "UCPgfAA83ROUVM-E3NCY154A"
-	const searchLimit = 2;
+	const searchLimit = 3;
 	youTube.search(key,searchLimit,{channelId: channel},function(error,result){
 		/*If there is any error in the request return the respond 
 		to be false else return respond to be true and send the data*/
