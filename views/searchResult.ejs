@@ -4,6 +4,13 @@
 	<title>Welcome to miniproject</title>
 </head>
 <body>
+<!--I there is no result -->
+<% if(result.length == 0){ %>
+	<h1 style="color: red">No data found</h1>
+	<h3><a href="/">Plzz try again</a></h3>
+<% } %>
+
+<!--Print ll the results -->
 <% for(var i=0;i<result.length;i++){%>
 	<% var snippet = result[i]["snippet"] %>
 	<% var id = result[i]["id"] %>

@@ -1,7 +1,10 @@
 /*This page consist of all the routes to the server*/
 'use strict'
-let lib = require('./lib/lib');
-let video = require('./controller/video')
+const lib = require('./lib/lib');
+const video = require('./controller/video');
+const fs = require('fs');
+const accesslog = require('access-log');
+
 var validSearchKey = function(req,res,next){
 	/*This is a middleware function to check valid search */
 	var keyWord = req.body.key;
@@ -24,28 +27,42 @@ var validSearchKey = function(req,res,next){
 		if(flagToCheckValidation == 0)
 			return next();
 	})
-} 
+}
+
+function keepLog(req,res,next){
+	/*This is a middleware function to store the access log in 
+		access.log file */
+	var format = 'url=":url" method=":method" statusCode=":statusCode" delta=":delta" ip=":ip"';
+	accesslog(req, res, format, function(store) {
+		  var date = new Date();
+		  store = date + " " + store + "\n\n";
+		  //write log in access.log file
+		  fs.appendFileSync("access.log", store);
+	});
+	return next();
+}
 
 module.exports = function(app){
-	app.get("/",function(req,res){
+	app.get("/",keepLog,function(req,res){
 		let pageInfo = {};
 		pageInfo.warning = req.flash("warning");
-		console.log(pageInfo);
 		res.render("index",pageInfo)
 	})
 
-	app.post("/video/search",validSearchKey,function(req,res){
+	app.post("/video/search",keepLog,validSearchKey,function(req,res){
 		let keyWord = req.body.key;
 		video.getVideoByName(keyWord,(found)=>{
-			if(found.res == false || found.data.length < 0){
-				let errorMessage = "Sorry no data found"
+			/*  Check if the response is true or not.If the response
+				is false just return the error message else if true
+				print the search result list*/
+			if(found.res == false){
+				let errorMessage = "Sorry no data found or quota limit exceed"
 				req.flash('warning',errorMessage)
 				res.redirect("/");
 			}
 			else{
 				let pageInfo = {}
 				pageInfo.result = found.data;
-				console.log(found.data[0])
 				res.render("searchResult",pageInfo); 
 			}
 		})
