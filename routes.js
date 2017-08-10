@@ -56,7 +56,7 @@ module.exports = function(app){
 				is false just return the error message else if true
 				print the search result list*/
 			if(found.res == false){
-				let errorMessage = "Sorry no data found or quota limit exceed"
+				let errorMessage = "Sorry no data found or quota limit exceed or api problem"
 				req.flash('warning',errorMessage)
 				res.redirect("/");
 			}
