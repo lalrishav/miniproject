@@ -11,7 +11,7 @@ const fs = require('fs');
 const Logging = require('js-logging');
 const flash = require('connect-flash');
 //The port on which the project will run
-var port = 3000;
+var port = 9000;
 
 var app = express();
 //configure session
