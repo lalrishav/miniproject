@@ -14,7 +14,7 @@ const flash = require('connect-flash');
 var port = 9000;
 
 var app = express();
-//configure session
+//configure session for using flash
 app.use(session({ 
   secret: 'lololppapadhoclabadhoclab',
   name: 'sessionId',
